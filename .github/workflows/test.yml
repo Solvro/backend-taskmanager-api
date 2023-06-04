@@ -1,0 +1,20 @@
+name: Test on pull request
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: yarn install
+      - name: Create docs
+        run: yarn docs
+      - name: Test
+        run: yarn test
