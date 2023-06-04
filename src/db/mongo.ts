@@ -1,5 +1,5 @@
 import { Db, MongoClient } from "mongodb";
-const LOG = "Log"
+import { Project } from "../modules/project/interfaces/project.interface";
 
 export class Mongo {
   private static mongo: Db;
@@ -12,6 +12,7 @@ export class Mongo {
       .then((db) => db);
 
   public static close = () => Mongo.client.close();
+  public static projects = () => Mongo.mongoCollection<Project>("projects");
 
   //@ts-ignore
   private static mongoCollection = <T>(name: string) => Mongo.mongo.collection<T>(name);
