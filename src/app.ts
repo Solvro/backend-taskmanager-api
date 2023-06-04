@@ -2,7 +2,7 @@ import express from "express";
 import { errorHandler } from "./error/error.handler";
 import cors from "cors";
 import { SWAGGER_PATH } from "./swagger/swagger.controller";
-import { healthController, swaggerController } from "./context/context";
+import { controllers, healthController, swaggerController } from "./context/context";
 import { HEALTH_PATH } from "./health.controller";
 
 export const app = express()
@@ -11,5 +11,5 @@ export const app = express()
   .use(express.json())
   .use(SWAGGER_PATH, swaggerController)
   .use(HEALTH_PATH, healthController)
-  //.use("/", controllers)
+  .use("/", controllers)
   .use(errorHandler);
