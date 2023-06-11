@@ -1,13 +1,12 @@
 import { Router } from "express";
-import { Controller } from "src/context/controller";
 import * as swaggerUi from "swagger-ui-express";
 import fs from "fs";
+import { Controller } from "../context/controller";
 
-export const SWAGGER_PATH = "/api-docs";
+export const SWAGGER_PATH = "/docs";
 const DOCS_JSON_PATH = "dist/docs/api.client.json";
-
 const loadDocumentation = (path: string) => {
-  fs.readFileSync(path);
+  return JSON.parse(fs.readFileSync(path, "utf-8"));
 };
 const documentation = loadDocumentation(DOCS_JSON_PATH);
 

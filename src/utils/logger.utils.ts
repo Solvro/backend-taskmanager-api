@@ -1,5 +1,5 @@
 import * as winston from "winston";
-import {appConfig} from "./config";
+import {appConfig} from "../config/config";
 
 
 const loggerConfig = {

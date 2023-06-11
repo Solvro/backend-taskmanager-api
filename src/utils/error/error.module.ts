@@ -1,6 +1,6 @@
 import { ErrorCodes } from "./error.codes";
-import { Resource } from "./error.datas";
-import {HTTP_CODE} from "../utils/http.codes";
+import { ErrorDatas } from "./error.datas";
+import { HTTP_CODE } from "../http.codes";
 
 export interface AppError {
   status: number,
@@ -34,11 +34,22 @@ export class ValidationErrors implements AppError {
 export class ResourceNotFoundError implements AppError {
   status = HTTP_CODE.NOT_FOUND;
   code = ErrorCodes.RESOURCE_NOT_FOUND;
-  data;
+  data = ErrorDatas.RESOURCE_NOT_FOUND;
+  resource;
 
-  constructor(resource?: Resource) {
-    this.data = `Resource ${resource} wasn't found for given credentials`;
+  constructor(resource: Resource) {
+    this.resource = resource;
   }
 }
 
+
+export class InternalServerError implements AppError {
+  status = HTTP_CODE.INTERNAL_SERVER_ERROR;
+  code = ErrorCodes.INTERNAL_SERVER_ERROR;
+  data = ErrorDatas.INTERNAL_SERVER_ERROR;
+}
+
+export enum Resource {
+  PROJECT = "PROJECT",
+}
 
