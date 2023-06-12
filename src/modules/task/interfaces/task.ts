@@ -16,7 +16,7 @@ export interface Task {
 export interface TaskCredentials {
   name: string;
   projectId: string;
-  assignedTo: {
+  assignedTo?: {
     userId: string
   };
   estimation: Estimation;
