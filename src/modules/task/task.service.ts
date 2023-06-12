@@ -4,8 +4,8 @@ import { TaskServicePort } from "./ports/task.service.port";
 import { v4 as uuid } from "uuid";
 import { TaskState } from "./interfaces/task.state";
 import { TaskRepositoryPort } from "./ports/task.repository.port";
-import { Project } from "../project/interfaces/project.interface";
 import { Resource, ResourceNotFoundError } from "../../utils/error/error.module";
+import { Project } from "../project/interfaces/project.interface";
 
 
 export class TaskService {
@@ -13,57 +13,62 @@ export class TaskService {
   constructor(private taskServiceAdapter: TaskServicePort, private taskRepositoryAdapter: TaskRepositoryPort) {
   }
 
-  addTask = async (taskCredentials: TaskCredentials): Promise<void> => {
+  addTask = async (taskCredentials: TaskCredentials, projectId: string): Promise<void> => {
     const userId: string = internalLocalStorage.getUserId();
+
+    const hasProject: boolean = await this.hasProject(projectId, userId);
+    if (!hasProject)
+      throw new ResourceNotFoundError(Resource.PROJECT);
 
     const generateTask = (): Task => ({
       id: uuid(),
+      projectId,
       credentials: taskCredentials,
       state: TaskState.NOT_ASSIGNED,
       createdAt: Date.now(),
-      createdBy: {
-        userId
-      }
+      createdBy: { userId }
     });
-
-    const hasProject: boolean = await this.hasProject(taskCredentials.projectId, userId);
-
-    if (!hasProject)
-      throw new ResourceNotFoundError(Resource.PROJECT);
 
     await this.taskRepositoryAdapter.insertOne(generateTask());
   };
 
-  editTask = async (editedTaskCredentials: TaskCredentials, taskId: string): Promise<Task> => {
+  editTaskState = async (taskState: TaskState, taskId: string, projectId: string): Promise<Task> => {
     const userId: string = internalLocalStorage.getUserId();
-    const hasProject: boolean = await this.hasProject(editedTaskCredentials.projectId, userId);
+    const task: Task | null = await this.getTask(taskId, projectId, userId);
 
-    if (!hasProject)
-      throw new ResourceNotFoundError(Resource.PROJECT);
+    await this.taskRepositoryAdapter.updateState(taskState, taskId, projectId, userId);
 
-    const task: Task | null = await this.taskRepositoryAdapter.findOne(taskId);
-    if (!task)
-      throw new ResourceNotFoundError(Resource.TASK);
+    return task;
+  };
 
-    const taskCredentials: TaskCredentials = task.credentials;
+  editTask = async (editedTaskCredentials: TaskCredentials, taskId: string, projectId: string): Promise<Task> => {
+    const userId: string = internalLocalStorage.getUserId();
+
+    const task: Task = await this.getTask(taskId, projectId, userId);
 
     const generateTaskCredentials = (): TaskCredentials => ({
-      name: editedTaskCredentials.name || taskCredentials.name,
-      projectId: taskCredentials.projectId,
-      assignedTo: editedTaskCredentials.assignedTo || taskCredentials.assignedTo,
-      estimation: editedTaskCredentials.estimation || taskCredentials.estimation,
-      dateRange: editedTaskCredentials.dateRange || taskCredentials.dateRange,
-      specialization: editedTaskCredentials.specialization || taskCredentials.specialization
+      name: editedTaskCredentials.name || task.credentials.name,
+      assignedTo: editedTaskCredentials.assignedTo || task.credentials.assignedTo,
+      estimation: editedTaskCredentials.estimation || task.credentials.estimation,
+      dateRange: editedTaskCredentials.dateRange || task.credentials.dateRange,
+      specialization: editedTaskCredentials.specialization || task.credentials.specialization
     });
 
     task.credentials = generateTaskCredentials();
-    await this.taskRepositoryAdapter.updateOne(task.credentials, task.id);
+    await this.taskRepositoryAdapter.updateOne(task.credentials, taskId, projectId, userId);
+
+    return task;
+  };
+
+  private getTask = async (taskId: string, projectId: string, userId: string): Promise<Task> => {
+    const task: Task | null = await this.taskRepositoryAdapter.findOne(taskId, projectId, userId);
+
+    if (!task)
+      throw new ResourceNotFoundError(Resource.TASK);
 
     return task;
   };
 
   private hasProject = (projectId: string, userId: string): Promise<boolean> =>
     this.taskServiceAdapter.findProjectByProjectAndUserId(projectId, userId).then((project: Project) => !!project);
-
-
 }

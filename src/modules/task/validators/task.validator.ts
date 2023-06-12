@@ -19,9 +19,10 @@ const dateRangeSchema = yup.object().shape({
 });
 
 export const taskCredentialsSchema = yup.object().shape({
-  name: nameSchema,
-  specialization: specializationSchema,
-  estimation: estimationSchema
+  name: nameSchema.required(),
+  specialization: specializationSchema.required(),
+  estimation: estimationSchema.required(),
+  assignedTo: assignedToSchema.notRequired(),
 });
 
 export const taskEditCredentialsSchema = yup.object().shape({

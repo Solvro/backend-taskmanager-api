@@ -5,17 +5,17 @@ import { Specialization } from "../../../utils/specializations";
 
 export interface Task {
   id: string;
+  projectId: string;
   credentials: TaskCredentials;
   state: TaskState;
   createdAt: number,
   createdBy: {
     userId: string
-  }
+  },
 }
 
 export interface TaskCredentials {
   name: string;
-  projectId: string;
   assignedTo?: {
     userId: string
   };
