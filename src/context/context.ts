@@ -1,16 +1,13 @@
 import { HealthController } from "../health.controller";
 import { SwaggerController } from "../swagger/swagger.controller";
 import { Controller } from "./controller";
-import { ProjectService } from "../modules/project/project.service";
-import { ProjectRepository } from "../modules/project/project.repository";
-import { ProjectController } from "../modules/project/project.controller";
+import { getProjectController } from "./project.context";
+import { getTaskController } from "./task.project";
 
-const projectController = () => {
-  const projectService = new ProjectService(new ProjectRepository());
-  return new ProjectController(projectService);
-};
-
-export const controllers = [projectController()]
+export const controllers = [
+  getTaskController(),
+  getProjectController(),
+]
   .map((c: Controller) => c.router);
 
 export const swaggerController = new SwaggerController().router;

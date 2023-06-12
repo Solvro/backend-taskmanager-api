@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {AppError} from "./error.module";
-import {logger} from "../utils/logger.utils";
+import {logger} from "../logger.utils";
 import {AxiosError, AxiosResponse} from "axios";
 import {v4 as uuid} from "uuid"
 

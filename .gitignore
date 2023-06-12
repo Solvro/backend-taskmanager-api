@@ -1,6 +1,5 @@
 .idea
 node_modules
 dist
-config
 *.iml
 .env.development

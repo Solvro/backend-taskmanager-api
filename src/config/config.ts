@@ -1,4 +1,4 @@
-import {config} from "dotenv-flow";
+import { config } from "dotenv-flow";
 import * as process from "process";
 
 config();
@@ -14,4 +14,3 @@ export const appConfig = {
   PORT: process.env.PORT || 3000,
   MONGO_URL: required("MONGO_URL", process.env.MONGO_URL)
 };
-

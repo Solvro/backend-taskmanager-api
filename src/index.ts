@@ -1,7 +1,7 @@
 import "express-async-errors";
-import "./utils/config";
-import { Mongo } from "./db/mongo";
-import { appConfig } from "./utils/config";
+import "./config/config";
+import { Mongo } from "./utils/db/mongo";
+import { appConfig } from "./config/config";
 import { logger } from "./utils/logger.utils";
 import { app } from "./app";
 
