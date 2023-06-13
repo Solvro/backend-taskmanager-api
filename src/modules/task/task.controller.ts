@@ -1,4 +1,4 @@
-import { Body, OperationId, Path, Post, Put, Route, Security } from "tsoa";
+import { Body, Get, OperationId, Path, Post, Put, Route, Security } from "tsoa";
 import { NextFunction, Request, Response, Router } from "express";
 import { TaskService } from "./task.service";
 import { Task, TaskCredentials } from "./interfaces/task";
@@ -25,6 +25,12 @@ export class TaskController implements Controller {
       (req: Request, res: Response) =>
         this.addProjectTask(req.body, req.params.projectId)
           .then(() => res.sendStatus(HTTP_CODE.CREATED))
+    );
+
+    this.router.get(`${PROJECT_PATH}/:projectId${TASK_PATH}`,
+      (req: Request, res: Response) =>
+        this.getProjectTasks(req.params.projectId)
+          .then((tasks: Task[]) => res.json(tasks))
     );
 
     this.router.put(`${PROJECT_PATH}/:projectId${TASK_PATH}/:taskId`,
@@ -66,6 +72,16 @@ export class TaskController implements Controller {
   @Post("/")
   addProjectTask(@Body() taskCredentials: TaskCredentials, @Path() projectId: string): Promise<void> {
     return this.taskService.addTask(taskCredentials, projectId);
+  }
+
+  /**
+   * Get every task assigned to given project.
+   */
+  @OperationId("getProjectTasks")
+  @Security("apiKey")
+  @Get("/")
+  getProjectTasks(@Path() projectId: string): Promise<Task[]> {
+    return this.taskService.getProjectTasks(projectId);
   }
 
   /**

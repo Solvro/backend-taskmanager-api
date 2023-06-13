@@ -10,7 +10,9 @@ const stateTransitions = {
 
 export const taskEditStateSchema = (getCurrentTaskState: () => Promise<TaskState | undefined>) => yup.object().shape({
   state: yup.string().oneOf(Object.values(TaskState), "Invalid state").required()
-    .test("This state cannot by set from current state", async function(this: yup.TestContext, value: any) {
+    .test(
+      "This state cannot by set from current state",
+      async function(this: yup.TestContext, value: any): Promise<boolean> {
       const currentState: TaskState | undefined = await getCurrentTaskState();
       if (!currentState)
         return false;

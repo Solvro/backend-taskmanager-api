@@ -11,6 +11,9 @@ export class TaskRepository implements TaskRepositoryPort {
   findOne = async (taskId: string, projectId: string, userId: string): Promise<Task | null> =>
     Mongo.tasks().findOne({ id: taskId, projectId, createdBy: { userId } });
 
+  findMany = async (projectId: string, userId: string): Promise<Task[]> =>
+    Mongo.tasks().find({ projectId, createdBy: { userId } }).toArray();
+
   findTaskState = async (taskId: string, projectId: string, userId: string): Promise<TaskState | undefined> =>
     this.findOne(taskId, projectId, userId).then(task => task?.state);
 

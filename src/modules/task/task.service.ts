@@ -16,7 +16,7 @@ export class TaskService {
   addTask = async (taskCredentials: TaskCredentials, projectId: string): Promise<void> => {
     const userId: string = internalLocalStorage.getUserId();
 
-    const hasProject: boolean = await this.hasProject(projectId, userId);
+    const hasProject: boolean = await this.taskServiceAdapter.hasProject(projectId, userId);
     if (!hasProject)
       throw new ResourceNotFoundError(Resource.PROJECT);
 
@@ -38,7 +38,7 @@ export class TaskService {
 
     await this.taskRepositoryAdapter.updateState(taskState, taskId, projectId, userId);
 
-    return task;
+    return this.mapTask(task);
   };
 
   editTask = async (editedTaskCredentials: TaskCredentials, taskId: string, projectId: string): Promise<Task> => {
@@ -57,7 +57,13 @@ export class TaskService {
     task.credentials = generateTaskCredentials();
     await this.taskRepositoryAdapter.updateOne(task.credentials, taskId, projectId, userId);
 
-    return task;
+    return this.mapTask(task);
+  };
+
+  getProjectTasks = async (projectId: string): Promise<Task[]> => {
+    const userId: string = internalLocalStorage.getUserId();
+    const tasks: Task[] = await this.taskRepositoryAdapter.findMany(projectId, userId);
+    return tasks.map(this.mapTask);
   };
 
   private getTask = async (taskId: string, projectId: string, userId: string): Promise<Task> => {
@@ -66,9 +72,15 @@ export class TaskService {
     if (!task)
       throw new ResourceNotFoundError(Resource.TASK);
 
-    return task;
+    return this.mapTask(task);
   };
 
-  private hasProject = (projectId: string, userId: string): Promise<boolean> =>
-    this.taskServiceAdapter.findProjectByProjectAndUserId(projectId, userId).then((project: Project) => !!project);
+  private mapTask = (task: any): Task => ({
+    id: task.id,
+    projectId: task.projectId,
+    state: task.state,
+    createdAt: task.createdAt,
+    createdBy: task.createdBy,
+    credentials: task.credentials
+  });
 }

@@ -6,7 +6,7 @@ const nameSchema = yup.string().required("Task name is required");
 const specializationSchema = yup.string().oneOf(Object.values(Specialization), "Invalid specialization").required("Specialization is required");
 const estimationSchema = yup.string().oneOf(Object.values(Estimation), "Invalid estimation").required("Estimation is required");
 const assignedToSchema = yup.object().shape({
-  userId: yup.string().required("You must assign task to user")
+  userId: yup.string()
 });
 const dateRangeSchema = yup.object().shape({
   start: yup.number().notRequired(),
