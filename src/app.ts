@@ -6,6 +6,7 @@ import { controllers, healthController, swaggerController } from "./context/cont
 import { HEALTH_PATH } from "./health.controller";
 import { storeUserId } from "./internal.storage/store.user.id";
 import { internalLocalStorage } from "./config/local.storage.config";
+import { auth } from "./auth/auth.request";
 
 export const app = express()
   .disable("x-powered-by")
@@ -14,6 +15,7 @@ export const app = express()
   .use(SWAGGER_PATH, swaggerController)
   .use(HEALTH_PATH, healthController)
   .use(internalLocalStorage.startStorage)
+  .use(auth)
   .use(storeUserId)
   .use("/", controllers)
   .use(errorHandler);

@@ -22,3 +22,9 @@ export interface Pagination {
   page: number;
   size: number;
 }
+
+export interface AuthData {
+  id: string;
+  version: string;
+  usersCredentials: { [userId: string]: string };
+}
