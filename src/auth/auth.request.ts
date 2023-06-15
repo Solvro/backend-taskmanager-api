@@ -11,13 +11,18 @@ export const getSecretKeyValue = (userId: string): string => {
 
 export const auth = (req: AuthRequest, _: Response, next: NextFunction): void => {
   const userId: string | undefined = req.get("user-id");
+
   if (!userId) throw new ResourceNotFoundError(Resource.USER_ID);
 
   const userSecretKey: string | undefined = req.get("secret-key");
-  if (!userSecretKey) throw new ResourceNotFoundError(Resource.USER_SECRET_KEY);
+
+  if (!userSecretKey) throw new ResourceNotFoundError(Resource.SECRET_KEY);
 
   const hashedUserSecretKey: string = hash(userSecretKey);
   const secretKey: string = getSecretKeyValue(userId);
+
+  if (!secretKey) throw new ResourceNotFoundError(Resource.USER_SAVED_SECRET_KEY);
+
   if (hashedUserSecretKey !== secretKey) throw new Forbidden();
 
   next();

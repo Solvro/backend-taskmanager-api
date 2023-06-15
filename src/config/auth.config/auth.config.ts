@@ -6,7 +6,7 @@ import { hash } from "./auth.config.utils";
 
 let USERS_AUTH_CREDENTIALS;
 
-const getMostRecentData = () => Mongo.authData().findOne({}, { sort: { created_at: -1 } });
+const getMostRecentData = () => Mongo.authData().findOne({}, { sort: { createdAt: -1 } });
 
 export const provideAuthData = async (): Promise<AuthData | null> => {
   await Mongo.connect(appConfig.MONGO_AUTH_SERVER_URL);

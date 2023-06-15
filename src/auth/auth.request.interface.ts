@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { date } from 'yup';
 
 export interface AuthApiRequest extends Request {
   client: string;
@@ -26,5 +27,6 @@ export interface Pagination {
 export interface AuthData {
   id: string;
   version: string;
+  createdAt: string;
   usersCredentials: { [userId: string]: string };
 }

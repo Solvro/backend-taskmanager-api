@@ -14,4 +14,5 @@ export const appConfig = {
   PORT: process.env.PORT || 3000,
   MONGO_SERVER_URL: required("MONGO_SERVER_URL", process.env.MONGO_SERVER_URL),
   MONGO_AUTH_SERVER_URL: required("MONGO_AUTH_SERVER_URL", process.env.MONGO_AUTH_SERVER_URL),
+  SALT_TO_HASH_FUNCTION: process.env.SALT_TO_HASH_FUNCTION || "HSlN0ciJcETKvJh4y9Kn",
 };
