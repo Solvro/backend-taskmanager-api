@@ -3,7 +3,7 @@ import { appConfig } from "../config";
 
 export const hash = (
   value: string,
-  salt = appConfig.SALT_TO_HASH_FUNCTION,
+  salt = appConfig.HASH_SALT,
   iterations = 10000,
   hashBytes = 64,
   digest = "sha512"

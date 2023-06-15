@@ -19,9 +19,11 @@ export const fetchUsersLoginCredentials = async (provideAuthData: () => Promise<
 
   const usersCredentials = authData.usersCredentials;
 
-  for (const [key, value] of Object.entries(usersCredentials)) usersCredentials[key] = hash(value);
+  const hashedCredentials = Object.entries(usersCredentials).map(([key, value]) => [key, hash(value)]);
 
-  USERS_AUTH_CREDENTIALS = authData;
+  const updatedCredentials = Object.fromEntries(hashedCredentials);
+
+  USERS_AUTH_CREDENTIALS = { ...authData, usersCredentials: updatedCredentials };
 };
 
 export { USERS_AUTH_CREDENTIALS };
