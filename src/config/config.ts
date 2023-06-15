@@ -1,5 +1,6 @@
 import { config } from "dotenv-flow";
 import * as process from "process";
+import { v4 as uuid } from "uuid";
 
 config();
 
@@ -12,5 +13,7 @@ const required = (key: string, variable?: string) => {
 export const appConfig = {
   LEVEL: process.env.LEVEL || "info",
   PORT: process.env.PORT || 3000,
-  MONGO_URL: required("MONGO_URL", process.env.MONGO_URL)
+  MONGO_SERVER_URL: required("MONGO_SERVER_URL", process.env.MONGO_SERVER_URL),
+  MONGO_AUTH_SERVER_URL: required("MONGO_AUTH_SERVER_URL", process.env.MONGO_AUTH_SERVER_URL),
+  HASH_SALT: process.env.HASH_SALT || uuid(),
 };

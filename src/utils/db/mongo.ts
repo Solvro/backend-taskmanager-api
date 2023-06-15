@@ -1,6 +1,7 @@
 import { Db, MongoClient } from "mongodb";
 import { Project } from "../../modules/project/interfaces/project.interface";
 import { Task } from "../../modules/task/interfaces/task";
+import { AuthData } from "../../auth/auth.request.interface";
 
 export class Mongo {
   private static mongo: Db;
@@ -15,6 +16,7 @@ export class Mongo {
   public static close = () => Mongo.client.close();
   public static projects = () => Mongo.mongoCollection<Project>("projects");
   public static tasks = () => Mongo.mongoCollection<Task>("tasks")
+  public static authData = () => Mongo.mongoCollection<AuthData>("authData");
 
   //@ts-ignore
   private static mongoCollection = <T>(name: string) => Mongo.mongo.collection<T>(name);
