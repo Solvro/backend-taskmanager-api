@@ -7,9 +7,12 @@ export class ProjectRepository implements ProjectRepositoryPort {
     await Mongo.projects().insertOne(project);
   };
 
+  getOneByProjectId = (projectId: string): Promise<Project | null> =>
+    Mongo.projects().findOne({ _id: projectId });
+
   getManyByUserId = (userId: string): Promise<Project[]> =>
     Mongo.projects().find({ userId }).toArray();
 
-  getOneByProjectAndUserId = (projectId:string, userId:string): Promise<Project | null> =>
-    Mongo.projects().findOne({id:projectId, userId})
+  getOneByProjectAndUserId = (projectId: string, userId: string): Promise<Project | null> =>
+    Mongo.projects().findOne({ _id: projectId, userId });
 }

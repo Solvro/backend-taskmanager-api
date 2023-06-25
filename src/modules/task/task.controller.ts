@@ -24,13 +24,18 @@ export class TaskController implements Controller {
       validate(taskCredentialsSchema),
       (req: Request, res: Response) =>
         this.addProjectTask(req.body, req.params.projectId)
-          .then(() => res.sendStatus(HTTP_CODE.CREATED))
+          .then((taskId: string) => res.status(HTTP_CODE.CREATED).json(taskId))
     );
 
     this.router.get(`${PROJECT_PATH}/:projectId${TASK_PATH}`,
       (req: Request, res: Response) =>
         this.getProjectTasks(req.params.projectId)
           .then((tasks: Task[]) => res.json(tasks))
+    );
+
+    this.router.get(`${PROJECT_PATH}/:projectId${TASK_PATH}/:taskId`,
+      (req: Request, res: Response) =>
+        this.getTask(req.params.taskId, req.params.projectId).then((task: Task) => res.json(task))
     );
 
     this.router.put(`${PROJECT_PATH}/:projectId${TASK_PATH}/:taskId`,
@@ -70,7 +75,7 @@ export class TaskController implements Controller {
   @OperationId("addProjectTask")
   @Security("apiKey")
   @Post("/")
-  addProjectTask(@Body() taskCredentials: TaskCredentials, @Path() projectId: string): Promise<void> {
+  addProjectTask(@Body() taskCredentials: TaskCredentials, @Path() projectId: string): Promise<string> {
     return this.taskService.addTask(taskCredentials, projectId);
   }
 
@@ -82,6 +87,16 @@ export class TaskController implements Controller {
   @Get("/")
   getProjectTasks(@Path() projectId: string): Promise<Task[]> {
     return this.taskService.getProjectTasks(projectId);
+  }
+
+  /**
+   * Get every task credentials.
+   */
+  @OperationId("getTask")
+  @Security("apiKey")
+  @Get("/:taskId")
+  getTask(@Path() taskId: string, @Path() projectId: string): Promise<Task> {
+    return this.taskService.getTask(taskId, projectId);
   }
 
   /**
