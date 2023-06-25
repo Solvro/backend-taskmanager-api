@@ -4,7 +4,7 @@ import { TaskState } from "./task.state";
 import { Specialization } from "../../../utils/specializations";
 
 export interface Task {
-  id: string;
+  _id: string;
   projectId: string;
   credentials: TaskCredentials;
   state: TaskState;
@@ -12,6 +12,7 @@ export interface Task {
   createdBy: {
     userId: string
   },
+  dateRange?: DateRange;
 }
 
 export interface TaskCredentials {
@@ -20,8 +21,5 @@ export interface TaskCredentials {
     userId: string
   };
   estimation: Estimation;
-  dateRange?: DateRange;
   specialization: Specialization;
 }
-
-

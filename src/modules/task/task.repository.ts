@@ -9,21 +9,24 @@ export class TaskRepository implements TaskRepositoryPort {
   };
 
   findOne = async (taskId: string, projectId: string, userId: string): Promise<Task | null> =>
-    Mongo.tasks().findOne({ id: taskId, projectId, createdBy: { userId } });
+    Mongo.tasks().findOne({ _id: taskId, projectId, createdBy: { userId } });
 
   findMany = async (projectId: string, userId: string): Promise<Task[]> =>
     Mongo.tasks().find({ projectId, createdBy: { userId } }).toArray();
+
+  findManyByState = async (projectId: string, userId: string, taskState: TaskState): Promise<Task[]> =>
+    Mongo.tasks().find({ projectId, createdBy: { userId }, state: taskState }).toArray();
 
   findTaskState = async (taskId: string, projectId: string, userId: string): Promise<TaskState | undefined> =>
     this.findOne(taskId, projectId, userId).then(task => task?.state);
 
   updateOne = async (taskCredentials: TaskCredentials, taskId: string): Promise<void> => {
-    await Mongo.tasks().updateOne({ id: taskId }, { $set: { credentials: taskCredentials } });
+    await Mongo.tasks().updateOne({ _id: taskId }, { $set: { credentials: taskCredentials } });
   };
 
   updateState = async (taskState: TaskState, taskId: string, projectId: string, userId: string): Promise<void> => {
     await Mongo.tasks().updateOne({
-      id: taskId,
+      _id: taskId,
       projectId,
       createdBy: { userId }
     }, { $set: { state: taskState } });

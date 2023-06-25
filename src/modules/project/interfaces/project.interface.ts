@@ -1,7 +1,7 @@
 import { Specialization } from "../../../utils/specializations";
 
 export interface Project {
-  id: string;
+  _id: string;
   userId: string;
   projectCredentials: ProjectCredentials;
 }

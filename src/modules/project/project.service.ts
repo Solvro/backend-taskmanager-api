@@ -12,7 +12,7 @@ export class ProjectService {
     const userId: string = internalLocalStorage.getUserId();
 
     const generateProject = (): Project => ({
-      id: uuid(),
+      _id: uuid(),
       userId,
       projectCredentials: {
         name: projectCredentials.name,
@@ -31,7 +31,7 @@ export class ProjectService {
   };
 
   private mapProject = (project: any): Project => ({
-    id: project.id,
+    _id: project._id,
     userId: project.userId,
     projectCredentials: project.projectCredentials
   });
