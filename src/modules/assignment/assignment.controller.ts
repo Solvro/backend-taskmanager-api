@@ -17,21 +17,37 @@ export class AssignmentController implements Controller {
         this.generateAssigment(req.params.projectId)
           .then((assigment: Assignment) => res.json(assigment))
     );
+
+    this.router.get(`${PROJECT_PATH}/:projectId${ASSIGNMENT_PATH}/:assignmentId`,
+      (req: Request, res: Response) =>
+        this.getAssignment(req.params.projectId, req.params.assignmentId)
+          .then((assignment: Assignment) => res.json(assignment))
+    );
   }
 
   /**
-   * Generate assigment for given project.
+   * Generate assignment for given project.
    * Algorithm will assign tasks to all project users with matching
    * specialization in way to finish project as soon as possible
    * Example body
    * {
    * }
    */
-  @OperationId("generateAssigment")
+  @OperationId("generateAssignment")
   @Security("apiKey")
   @Post("/")
   generateAssigment(@Path() projectId: string): Promise<Assignment> {
     return this.assigmentService.createAssignment(projectId);
+  }
+
+  /**
+   * Get assignment proposal for given id
+   */
+  @OperationId("getAssignment")
+  @Security("apiKey")
+  @Post("/:assignmentId")
+  getAssignment(@Path() projectId: string, @Path() assignmentId: string): Promise<Assignment> {
+    return this.assigmentService.getAssignment(projectId, assignmentId);
   }
 
 }

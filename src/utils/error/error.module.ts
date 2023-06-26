@@ -51,6 +51,7 @@ export class InternalServerError implements AppError {
 
 export enum Resource {
   PROJECT = "PROJECT",
-  TASK = "TASK"
+  TASK = "TASK",
+  ASSIGNMENT = "ASSIGNMENT"
 }
 
