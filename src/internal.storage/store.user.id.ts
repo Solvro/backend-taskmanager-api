@@ -3,7 +3,7 @@ import { AuthRequest } from "../auth/auth.request.interface";
 import { internalLocalStorage } from "../config/local.storage.config";
 
 export const storeUserId = (req: AuthRequest, _: Response, next: NextFunction) => {
-  //internalLocalStorage.storeUserId(req.user.id);
-  internalLocalStorage.storeUserId("DUMMY_USER"); //TODO fix this
+  const userId: string = req.get("user-id") as string;
+  internalLocalStorage.storeUserId(userId);
   next();
 };

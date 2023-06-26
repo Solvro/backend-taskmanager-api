@@ -42,7 +42,6 @@ export class ResourceNotFoundError implements AppError {
   }
 }
 
-
 export class InternalServerError implements AppError {
   status = HTTP_CODE.INTERNAL_SERVER_ERROR;
   code = ErrorCodes.INTERNAL_SERVER_ERROR;
@@ -53,5 +52,14 @@ export enum Resource {
   PROJECT = "PROJECT",
   TASK = "TASK",
   ASSIGNMENT = "ASSIGNMENT"
+  USER_ID = "USER_ID",
+  SECRET_KEY = "SECRET_KEY",
+  AUTH_DATA = "AUTH_DATA",
+  USER_SAVED_SECRET_KEY = "USER_SAVED_SECRET_KEY",
 }
 
+export class Forbidden implements AppError {
+  status = HTTP_CODE.FORBIDDEN;
+  code = ErrorCodes.FORBIDDEN;
+  data = ErrorDatas.FORBIDDEN;
+}
