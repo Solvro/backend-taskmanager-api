@@ -9,7 +9,8 @@ import { findDurationForEstimation } from "../assign.algorithm/find.duration.for
 import { assignTasks } from "../assign.algorithm/assign.tasks";
 import { ProjectRepository } from "../modules/project/project.repository";
 import { Project, ProjectUser } from "../modules/project/interfaces/project.interface";
-import { shuffleList } from "../utils/random.sort";
+import { shuffleList } from "../utils/sort/random.sort";
+import { sortTasksViaEstimation } from "../utils/sort/sort.tasks.via.estimation";
 
 export const getAssignmentController = () => {
   const assignmentRepository = new AssignmentRepository();
@@ -25,7 +26,7 @@ export const getAssignmentController = () => {
     assignTasks: (
       tasksToAssign: Task[],
       estimationToDuration: { [estimation: string]: number },
-      users: ProjectUser[]) => assignTasks(tasksToAssign, estimationToDuration, users, shuffleList)
+      users: ProjectUser[]) => assignTasks(tasksToAssign, estimationToDuration, users, shuffleList, sortTasksViaEstimation)
   };
   const assignmentService = new AssignmentService(assignmentServiceAdapter, assignmentRepository);
 

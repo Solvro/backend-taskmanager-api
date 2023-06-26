@@ -6,7 +6,8 @@ export const assignTasks = (
   tasksToAssign: Task[],
   estimationToDuration: { [estimation: string]: number },
   users: ProjectUser[],
-  sortUsers: (users: ProjectUser[]) => ProjectUser[]
+  sortUsers: (users: ProjectUser[]) => ProjectUser[],
+  sortTasks: (estimationToDuration: { [estimation: string]: number }) => (taskA: Task, TaskB: Task) => number
 ): { [taskId: string]: { userId: string } } => {
   const divideAndSortUsersBySpecialization = (users: ProjectUser[]):
     { [specialization: string]: ProjectUser[] } => {
@@ -25,6 +26,8 @@ export const assignTasks = (
   const usersBySpecialization = divideAndSortUsersBySpecialization(users);
 
   let assignedTasks = {};
+
+  tasksToAssign.sort(sortTasks(estimationToDuration));
 
   for (let task of tasksToAssign) {
     const availableUsers: ProjectUser[] = usersBySpecialization[task.credentials.specialization];
