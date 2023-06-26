@@ -5,6 +5,7 @@ export interface Assignment {
   createdBy: {
     userId: string;
   };
+  projectId: string;
   createdAt: number;
   state: AssignmentState;
   assign: { [taskId: string]: { userId: string } };

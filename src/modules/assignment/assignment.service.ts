@@ -6,6 +6,7 @@ import { Task } from "../task/interfaces/task";
 import { v4 as uuid } from "uuid";
 import { AssignmentState } from "./interfaces/assignment.state";
 import { ProjectUser } from "../project/interfaces/project.interface";
+import { Resource, ResourceNotFoundError } from "../../utils/error/error.module";
 
 export class AssignmentService {
 
@@ -36,6 +37,7 @@ export class AssignmentService {
       createdBy: {
         userId
       },
+      projectId,
       createdAt: Date.now(),
       state: AssignmentState.PROPOSED,
       assign: assignedTasks
@@ -46,6 +48,15 @@ export class AssignmentService {
     await this.assignmentRepositoryAdapter.insertOne(assigment);
 
     return assigment;
+  };
+
+  getAssignment = async (projectId: string, assignmentId: string): Promise<Assignment> => {
+    const assignment: Assignment | null = await this.assignmentRepositoryAdapter.findOne(projectId, assignmentId);
+
+    if (!assignment)
+      throw new ResourceNotFoundError(Resource.ASSIGNMENT);
+
+    return assignment;
   };
 }
 
