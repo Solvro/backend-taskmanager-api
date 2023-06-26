@@ -10,11 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: build
-        uses: actions/checkout@v2
-                - run: yarn install
-                - run: yarn docs
-                - run: yarn build
+      - run: yarn install
+      - run: yarn docs
+      - run: yarn build
+
       - name: Authenticate with Google Cloud
         uses: google-github-actions/setup-gcloud@v0.3.0
         with:
