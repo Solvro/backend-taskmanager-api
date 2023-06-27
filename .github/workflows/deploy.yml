@@ -19,7 +19,7 @@ jobs:
       - name: Authenticate with Google Cloud
         uses: google-github-actions/setup-gcloud@v0.3.0
         with:
-          version: '324.0.0'
+          version: '297.0.1'
           project_id: ${{ env.PROJECT_ID }}
           service_account_email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
