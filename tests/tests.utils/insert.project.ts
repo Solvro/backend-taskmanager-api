@@ -1,7 +1,6 @@
 import { Project, ProjectCredentials, ProjectUser } from "../../src/modules/project/interfaces/project.interface";
-import { DEMO_USER_ID } from "../mocks/store.user.id.mock";
 import { Specialization } from "../../src/utils/specializations";
-import { projects } from "../mocks/repositories/project.repository.mock";
+import { TEST_USER_ID } from "../mocks/app.mock";
 
 export const projectIds = {
   id1: "ID1",
@@ -32,14 +31,6 @@ export const correctProjectCredentials: ProjectCredentials = {
 
 export const correctProject: Project = {
   _id: projectIds.id1,
-  userId: DEMO_USER_ID,
+  userId: TEST_USER_ID,
   projectCredentials: correctProjectCredentials,
-};
-
-export const insertOne = (project: Project) => {
-  projects.push(project);
-};
-
-export const dropProjects = () => {
-  projects.length = 0;
 };
