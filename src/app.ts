@@ -7,6 +7,7 @@ import { HEALTH_PATH } from "./health.controller";
 import { storeUserId } from "./internal.storage/store.user.id";
 import { internalLocalStorage } from "./config/local.storage.config";
 import { auth } from "./auth/auth.request";
+import { getSecretKeyValue } from "./config/auth.config/auth.config";
 
 export const app = express()
   .disable("x-powered-by")
@@ -14,7 +15,7 @@ export const app = express()
   .use(express.json())
   .use(SWAGGER_PATH, swaggerController)
   .use(HEALTH_PATH, healthController)
-  .use(auth)
+  .use(auth(getSecretKeyValue))
   .use(internalLocalStorage.startStorage)
   .use(storeUserId)
   .use("/", controllers)

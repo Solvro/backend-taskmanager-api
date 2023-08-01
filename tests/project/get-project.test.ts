@@ -20,7 +20,7 @@ describe(`Testing GET ${PROJECT_PATH}/:projectId`, () => {
       .set(SECRET_KEY_HEADER, TEST_SECRET_KEY)
       .send();
 
-    expect(status).toBe(HTTP_CODE.SUCCESS);
+    expect(status).toBe(HTTP_CODE.OK);
     expect(body.projectCredentials).toStrictEqual(validProject.projectCredentials);
   });
 

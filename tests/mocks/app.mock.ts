@@ -5,22 +5,15 @@ import { Controller } from "../../src/context/controller";
 import "express-async-errors";
 import { storeUserId } from "../../src/internal.storage/store.user.id";
 import { auth } from "../../src/auth/auth.request";
+import { HASHED_TEST_SECRET_KEY } from "./test.credentials";
 
-jest.mock("../../src/config/auth.config/auth.config.ts", () => ({
-  getSecretKeyValue: jest.fn(
-    () =>
-      "24f0e6b07a4048846e66e9d82e76ca9e687611ed22d6bcbdc0d5810ea497f2778d4c1d54711928bd0ee780ff7fe74c7d2ab7462bc26963bdf252c9fa5b2eba0d"
-  ),
-}));
+const getSecretKeyValueMock = () => HASHED_TEST_SECRET_KEY;
 
 export const appMock = (controllers: Controller[]) =>
   express()
     .use(express.json())
-    .use(auth)
+    .use(auth(getSecretKeyValueMock))
     .use(internalLocalStorage.startStorage)
     .use(storeUserId)
-    .use(
-      "/",
-      controllers.map((c: Controller) => c.router)
-    )
+    .use(controllers.map((c: Controller) => c.router))
     .use(errorHandler);

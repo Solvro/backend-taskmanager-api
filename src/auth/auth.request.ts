@@ -1,10 +1,9 @@
 import { AuthRequest } from "./auth.request.interface";
 import { NextFunction, Response } from "express";
 import { Forbidden, Resource, ResourceNotFoundError } from "../utils/error/error.module";
-import { getSecretKeyValue } from "../config/auth.config/auth.config";
 import { hash } from "../config/auth.config/auth.config.utils";
 
-export const auth = (req: AuthRequest, _: Response, next: NextFunction): void => {
+export const auth = (getSecretKeyValue) => (req: AuthRequest, _: Response, next: NextFunction) => {
   const userId: string | undefined = req.get("user-id");
   if (!userId) throw new ResourceNotFoundError(Resource.USER_ID);
 
