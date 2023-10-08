@@ -26,4 +26,7 @@ export const fetchUsersLoginCredentials = async (provideAuthData: () => Promise<
   USERS_AUTH_CREDENTIALS = { ...authData, usersCredentials: updatedCredentials };
 };
 
-export { USERS_AUTH_CREDENTIALS };
+export const getSecretKeyValue = (userId: string): string => {
+  const { usersCredentials } = USERS_AUTH_CREDENTIALS;
+  return usersCredentials[userId];
+};
